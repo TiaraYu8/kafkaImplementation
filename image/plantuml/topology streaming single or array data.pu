@@ -1,0 +1,31 @@
+@startuml splitting single and array field type
+
+participant Kafka as k
+participant PfxKafkaProject as pk
+
+== topology process for single or array object ==
+
+activate k
+k -> pk++ : streaming all pfx data stream
+note left #LightBlue
+listen to : <color:red>pfx-stream
+end note
+
+pk -> pk: filter message by <color:red>pfUUID
+pk -> pk : filter message by field type (<color:red>ARRAY_OBJECT/SINGLE_OBJECT<color:black>)
+
+pk -> pk : group by UUID
+pk -> pk : compose table
+
+
+pk -> pk : store to kafka table
+note left #LightBlue
+label for ktable:
+- ARRAY_OBJECT => <color:red>pfx-array-object-data
+- SINGLE_OBJECT => <color:red>pfx-single-object-data
+end note
+
+deactivate k
+deactivate pk
+
+@enduml

@@ -1,0 +1,40 @@
+@startuml splitting single and array field type
+
+participant Kafka as k
+participant PfxKafkaProject as pk
+
+== splitting data between single and array field type ==
+
+activate k
+k -> pk++ : listen to "pfx-dev"
+pk -> pk : check what is the aggregator type
+pk -> pk : get processor table list for the exact aggregator type 
+
+loop for every processor table in list
+pk -> pk : compose data stream dto
+note left #LightBlue
+tableDataStreamDTO
+end note
+
+k <-- pk : publish pfx data stream
+note left #LightBlue
+publish to: <color:red>pfx-stream
+end note
+end
+
+pk -> pk : compose process notif DTO
+note left #LightBlue
+tableNotidDTO's
+end note
+k <-- pk : publish pfx stream process notif
+note left #LightBlue
+publish to: <color:red>pfx-process-notif
+end note
+
+loop for every labelled data
+ k -> k : process data
+ k-> k : update flagProcess
+ end
+
+deactivate pk
+@enduml

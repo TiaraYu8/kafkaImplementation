@@ -1,0 +1,32 @@
+app:
+  name: pfxKafka
+  version: "1.0.0"
+  description: "kafka implementation framework"
+
+spring:
+  application:
+    name: ${app.name}
+  datasource:
+    url: jdbc:oracle:thin:@10.17.160.42:1521:xe
+    username: db_daf
+    password: db_daf
+    driver-class-name: oracle.jdbc.OracleDriver
+    hikari:
+      poolName: ${spring.datasource.username}
+      minimumIdle: 2
+      maximumPoolSize: 20
+      connectionTimeout: 10000
+      idleTimeout: 20000
+      maxLifetime: 30000
+  kafka:
+    bootstrap-servers: 10.17.160.42:9094
+    producer:
+      key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      key-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted.packages: '*'

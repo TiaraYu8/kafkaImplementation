@@ -1,0 +1,27 @@
+@startuml process single or array data
+
+participant Kafka as k
+participant pfxKafkaProject as pk
+
+== process single or array field type data ==
+
+activate k
+k -> pk++ : listen to "pfx-process-notif"
+pk -> pk : get KTable data from label
+note left #LightBlue
+label for ktable:
+- ARRAY_OBJECT => <color:red>pfx-array-object-data
+- SINGLE_OBJECT => <color:red>pfx-single-object-data
+end note
+
+loop parallel stream for every field data 
+pk -> pk : find processor service by field name
+alt if processor service cannot be found
+    pk -> pk : ignore data
+else
+    pk -> pk : process data
+end 
+
+end 
+
+@enduml

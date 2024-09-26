@@ -1,0 +1,21 @@
+@startuml
+left to right direction
+
+actor "perusahaan pihak ketiga" as ppt
+actor fifgroup as f
+
+package kafka{
+usecase "publish message" as uc1
+usecase "kafka topic" as topic
+usecase "sync data stream" as uc2
+
+}
+
+note top of uc2
+synchronization with kafka streams
+end note
+uc1 --> topic
+uc2--> topic
+f --> uc2
+ppt --> uc1
+@enduml
